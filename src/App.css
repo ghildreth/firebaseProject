@@ -1,9 +1,9 @@
 html {
   display: flex;
-  margin: 0rem 2rem 0rem 2rem;
-  width: 80%;
+  margin: 3rem;
   font-family: 'Ubuntu' , monospace;
   background: #C1D7AE;
+  justify-content: center;
 }
 .App {
   text-align: center;
