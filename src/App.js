@@ -32,7 +32,7 @@ class App extends Component {
       .ref("CAD")
       .orderByKey()
     dollarRef.on("child_added", snapshot => {
-      let dollar = { integer: snapshot.val(), id: snapshot.key };
+      let dollar = { integer: snapshot.val(), id: snapshot.key, currentCoin: this.state.selected};
       this.setState({ dollars: [dollar].concat(this.state.dollars) });
     });
     let coinRef = fire
@@ -40,7 +40,7 @@ class App extends Component {
       .ref("coins")
       .orderByKey()
     coinRef.on("child_added", snapshot => {
-      let coin = { integer: snapshot.val(), id: snapshot.key };
+      let coin = { integer: snapshot.val(), id: snapshot.key, currentCoin: this.state.selected};
       this.setState({ coins: [coin].concat(this.state.coins) });
     });
   }
@@ -203,8 +203,8 @@ class App extends Component {
           </form>
           <ul>
             Transaction History
-            {this.state.coins.map(indiv => <li key={indiv.key}>Money spent on coins ${indiv.integer}</li>)}
-            {this.state.dollars.map(indiv => <li key={indiv.key}>Coins acquired by dollar amount {indiv.integer}</li>)}
+            {this.state.coins.map(indiv => <li key={indiv.key}>Money spent on {indiv.currentCoin}: ${indiv.integer}</li>)}
+            {this.state.dollars.map(indiv => <li key={indiv.key}>{indiv.currentCoin} acquired by CAD: {indiv.integer}</li>)}
            </ul> 
         </div>
       );
