@@ -201,9 +201,9 @@ class App extends Component {
             </label>
             <input type="submit" value="Submit" />
           </form>
+            <h4>Transaction History</h4>
           <ul>
-            Transaction History
-            {this.state.coins.map(indiv => <li key={indiv.key}>Money spent on {indiv.currentCoin}: ${indiv.integer}</li>)}
+            {this.state.coins.map(indiv => <li key={indiv.key}>CAD spent on {indiv.currentCoin}: ${indiv.integer}</li>)}
             {this.state.dollars.map(indiv => <li key={indiv.key}>{indiv.currentCoin} acquired by CAD: {indiv.integer}</li>)}
            </ul> 
         </div>
