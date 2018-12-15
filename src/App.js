@@ -10,49 +10,47 @@ class App extends Component {
       isLoaded: false,
       bitcoin: [],
       ethereum: [],
-      value: {value: ''},
+      dollarValue: '',
+      coinValue: '',
       total: {total: ''},
-      selected: {selected: 'bitcoin'}
+      selected: 'bitcoin',
     };
 
     this.handleChangeCAD = this.handleChangeCAD.bind(this);
     this.handleChangeCoin = this.handleChangeCoin.bind(this);
     this.handleSubmitCAD = this.handleSubmitCAD.bind(this)
     this.handleSubmitCoin = this.handleSubmitCoin.bind(this)
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleChangeCoin(event) {
-    this.setState({value: event.target.value})
+    this.setState({coinValue: event.target.value})
     this.setState({total: event.target.value * (this.state.selected === 'bitcoin' ? this.state.bitcoin.ask : this.state.ethereum.ask)})
   }
 
   handleChangeCAD(event) {
-    this.setState({value: event.target.value})
-    this.setState({total: event.target.value / (this.state.selected.selected === 'bitcoin' ? this.state.bitcoin.ask : this.state.ethereum.ask)})
+    this.setState({dollarValue: event.target.value})
+    this.setState({total: event.target.value / (this.state.selected === 'bitcoin' ? this.state.bitcoin.ask : this.state.ethereum.ask)})
   }
 
   handleSubmitCAD(event) {
-    alert('You want to invest: $' + this.state.value  + ' ? You will receive ' + this.state.total + " coins.")
+    alert('You want to invest: $' + this.state.dollarValue  + ' ? You will receive ' + this.state.total + " coins.")
+    this.setState({dollarValue: ''})
     event.preventDefault();
   }
   handleSubmitCoin(event) {
-    alert('You want acquire ' + this.state.value  + ' coins ? Your total will be $' + this.state.total)
-    event.preventDefault();
-  }
-  handleChange(event) {
-    this.setState({selected: event.target.value});
-  }
-
-  handleSubmit(event) {
-    alert('You have selected: ' + this.state.selected.selected);
+    alert('You want acquire ' + this.state.coinValue  + ' coins ? Your total will be $' + this.state.total)
+    this.setState({coinValue: ''})
     event.preventDefault();
   }
 
   handleClick(event) {
     this.setState({selected: this.state.selected === 'bitcoin' ? "ethereum" : "bitcoin"})
+    event.preventDefault();
+  }
+
+  changeColor() {
+    this.setState({})
   }
 
   componentDidMount() {
@@ -92,7 +90,13 @@ class App extends Component {
 
   render() {
     console.log('You have selected: ' + this.state.selected)
+
+    let btcButton = this.state.selected === 'bitcoin' ? "on" : "off";
+
+    let ethButton = this.state.selected === 'ethereum' ? "on" : "off";
+
     const { error, isLoaded, bitcoin, ethereum } = this.state;
+
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
@@ -100,17 +104,17 @@ class App extends Component {
     } else {
       return (
         <div>
-          <h1>This works!</h1>
+          <h1>Sage Coins Demo</h1>
           <h2>Buy Bitcoin or Ethereum</h2>
           <div>
-            <button onClick={this.handleClick}>Bitcoin: ${bitcoin.ask}</button> 
-            <button onClick={this.handleClick}>Ethereum: ${ethereum.ask}</button>          
+            <button className={btcButton} onClick={this.handleClick }>Bitcoin: ${bitcoin.ask}</button> 
+            <button className={ethButton} onClick={this.handleClick }>Ethereum: ${ethereum.ask}</button>          
           </div>
           <form onSubmit={this.handleSubmitCAD}>
             <label>
               Enter CAD Amount here: $
               <br></br>
-            <input name="orderForm" value={this.state.value.value} onChange={this.handleChangeCAD}></input>
+            <input name="orderForm" value={this.state.dollarValue} onChange={this.handleChangeCAD}></input>
             </label>
             <input type="submit" value="Submit"/>
             
@@ -119,7 +123,7 @@ class App extends Component {
             <label>
               Enter the number of coins you wish to purchase
               <br></br>
-            <input name="orderForm" value={this.state.value.value} onChange={this.handleChangeCoin}></input>
+            <input name="orderForm" value={this.state.coinValue} onChange={this.handleChangeCoin}></input>
             </label>
             <input type="submit" value="Submit"/>
             

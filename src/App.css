@@ -1,3 +1,9 @@
+html {
+  display: flex;
+  margin: 0rem 2rem 0rem 2rem;
+  width: 80%;
+  font-family: 'B612 Mono', monospace;
+}
 .App {
   text-align: center;
 }
@@ -29,4 +35,9 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.on {
+  background: #4bb543;
+  color: white;
 }
