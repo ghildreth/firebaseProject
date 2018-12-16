@@ -130,6 +130,12 @@ class App extends Component {
   }
 
   logout(){
+    auth.signOut()
+      .then(() => {
+        this.setState({
+          user: null
+        });
+      });
 
   }
 
@@ -166,6 +172,11 @@ class App extends Component {
           });
         }
       );
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          this.setState({ user });
+        }
+      });
   }
 
   render() {
@@ -231,11 +242,17 @@ class App extends Component {
           :
           <h1 style={{textShadow: `2px 2px black`}}>Please login to start investing!</h1>
           }
+          {this.state.user ?
+          <div>
             <h4>Transaction History</h4>
           <ul>
             {this.state.coins.map(indiv => <li key={indiv.key}>CAD spent on {indiv.currentCoin}: ${indiv.integer}</li>)}
             {this.state.dollars.map(indiv => <li key={indiv.key}>{indiv.currentCoin} acquired by CAD: {indiv.integer}</li>)}
            </ul> 
+           </div>
+           :
+           ''
+          }
         </div>
       );
     }
