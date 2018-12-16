@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import fire from "./fire";
+import fire, { auth, provider } from "./fire";
 
 class App extends Component {
   constructor(props) {
@@ -9,6 +9,7 @@ class App extends Component {
     this.state = {
       error: null,
       isLoaded: false,
+      user: null,
       bitcoin: [],
       ethereum: [],
       dollarValue: "",
@@ -25,6 +26,8 @@ class App extends Component {
     this.handleSubmitCAD = this.handleSubmitCAD.bind(this);
     this.handleSubmitCoin = this.handleSubmitCoin.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
   }
   componentWillMount() {
     let dollarRef = fire
@@ -116,6 +119,20 @@ class App extends Component {
     this.setState({});
   }
 
+  login() {
+    auth.signInWithPopup(provider)
+      .then((result) => {
+        const user = result.user;
+        this.setState({
+          user
+        })
+      })
+  }
+
+  logout(){
+
+  }
+
   componentDidMount() {
     fetch(`https://api.quadrigacx.com/v2/ticker?book=btc_cad`)
       .then(res => res.json())
@@ -166,7 +183,14 @@ class App extends Component {
       return <div>Loading...</div>;
     } else {
       return (
-        <div>
+        <div className="wrapper">
+        <div style={{float: `right`}} className="loginlogout">
+          {!this.state.user ?
+            <button onClick={this.login}>Log in</button> 
+          :
+            <button onClick={this.logout}>Log out</button> 
+          }
+          </div>
           <h1>Sage Coins Demo</h1>
           <h2>Buy Bitcoin or Ethereum</h2>
           <div>
@@ -177,6 +201,8 @@ class App extends Component {
               Ethereum: ${ethereum.ask}
             </button>
           </div>
+          {this.state.user ?
+          <div>
           <form onSubmit={this.handleSubmitCAD && this.addTotalCAD.bind(this)}>
             <label>
               Enter CAD Amount here: $<br />
@@ -201,6 +227,10 @@ class App extends Component {
             </label>
             <input type="submit" value="Submit" />
           </form>
+          </div>
+          :
+          <h1 style={{textShadow: `2px 2px black`}}>Please login to start investing!</h1>
+          }
             <h4>Transaction History</h4>
           <ul>
             {this.state.coins.map(indiv => <li key={indiv.key}>CAD spent on {indiv.currentCoin}: ${indiv.integer}</li>)}
